@@ -1,13 +1,24 @@
-const quoteContainer = document.getElementById('quote-generator')
+const quoteContainer = document.getElementById('quote-container')
 const quoteText = document.getElementById('quote')
 const authorText = document.getElementById('author')
 const twitterBtn = document.getElementById('twitter')
 const newQuoteBtn = document.getElementById('new-quote')
-
+const loader = document.getElementById('loader')
 
 let apiQuotes = []
 
+const showLoadingSpinner = () => {
+    loader.hidden = false
+    quoteContainer.hidden = true
+}
+
+const hideLoadingSpinner = () => {
+    quoteContainer.hidden = false
+    loader.hidden = true
+}
+
 const newQuote = () => {
+    showLoadingSpinner()
     // Pick a random quote from apiQuotes array
     const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)]
 
@@ -25,13 +36,14 @@ const newQuote = () => {
         quoteText.classList.remove('long-quote')
     }
 
-    // Set the quote text
+    // Set the quote text and hide the loader
     quoteText.textContent = quote.text
+    hideLoadingSpinner()
 }
-
 
 // Get Quotes from API
 const getQuotes = async () => {
+    showLoadingSpinner()
     const apiUrl = 'https://type.fit/api/quotes'
 
     try {
@@ -40,6 +52,7 @@ const getQuotes = async () => {
         newQuote()
     } catch (error) {
         // Catch error here
+        console.log('Something went wrong:', error);
     }
 }
 
